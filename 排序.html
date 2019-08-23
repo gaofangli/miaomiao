@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // /miao/api/cityList
+        let numArr = "QWERTYUIOPASDFGHJKLZXCVBNM".split("").sort((a,b) => a.charCodeAt() - b.charCodeAt())
+        console.log(numArr)
+        let arr = []
+       fetch("/miao/api/cityList",function(res){
+            let list = res.data.cities
+            arr = list.sort(function(a,b){
+                return a.py[0].charCodeAt() - b.py[0].charCodeAt()
+            })
+            console.log(arr)
+        })
+          
+        // let arr = []
+        // for(var item of numArr){
+        //     arr.push({big:item})
+        // }
+        // console.lg(arr)
+        // $.get("http://39.97.33.178/api/cityList",function(res))
+    </script>
+</body>
+</html>
