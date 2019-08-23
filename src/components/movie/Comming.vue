@@ -1,44 +1,63 @@
 <template>
   <div>
-    <div class="movie-sect" v-for="(item,index) in comingList" :key="index">
-      <div class="img fl">
-        <!-- 图片字符串替代 -->
-        <router-link :to="'/detail/' + item.id"><img :src="item.img.replace('w.h', '128.180')" alt /></router-link>
-      </div>
-      <div class="text fl">
-        <!-- 判断如果version==v3d给它一个类名 -->
-        <span :class="{'d3':item.version !=n}" class="d" v-show="item.version">{{item.version}}</span>
-        <p class="tit">
-          <span class="s1">{{item.nm}}</span>
-        </p>
-        <p class="sc">{{item.wish}}人想看</p>
-        <p class="star">{{item.star}}</p>
-        <p class="showInfo">{{item.showInfo}}</p>
-        <span class="buy">预售</span>
+    <!-- 数据没有加载成功显示 -->
+    <Loading v-if="isLoading" />
+    <div v-else>
+      <div class="movie-sect" v-for="(item,index) in comingList" :key="index">
+        <div class="img fl">
+          <!-- 图片字符串替代 -->
+          <router-link :to="'/detail/' + item.id">
+            <img :src="item.img.replace('w.h', '128.180')" alt />
+          </router-link>
+        </div>
+        <div class="text fl">
+          <!-- 判断如果version==v3d给它一个类名 -->
+          <span :class="{'d3':item.version !=n}" class="d" v-show="item.version">{{item.version}}</span>
+          <p class="tit">
+            <span class="s1">{{item.nm}}</span>
+          </p>
+          <p class="sc">{{item.wish}}人想看</p>
+          <p class="star">{{item.star}}</p>
+          <p class="showInfo">{{item.showInfo}}</p>
+          <span class="buy">预售</span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Loading from "../Loading/Loading";
+
 export default {
+  components: {
+    Loading
+  },
   data() {
     return {
       n: "v3d",
-      comingList: []
+      comingList: [],
+      isLoading: true,
+      prevCityId: -1
     };
   },
-
   methods: {
     getData() {
-      this.$axios({
-        url: "/miao/api/movieComingList?cityId=10"
-      }).then(res => {
+    //  往路劲拼接城市id
+      var cityId = this.$store.state.city.id;
+      if (this.prevCityId === cityId) {
+        return;
+      }
+      console.log(1)
+      this.isLoading = true;
+      this.$axios.get("/miao/api/movieComingList?cityId=" +cityId).then(res => {
         this.comingList = res.data.data.comingList;
+        this.isLoading = false;
+        // this.prevCityId =cityId
       });
     }
   },
-  mounted() {
+  activated()  {
     this.getData();
   }
 };
@@ -101,9 +120,7 @@ export default {
       z-index: 2;
     }
     .d3 {
-
       width: 0.58rem;
-  
     }
     .buy {
       width: 0.37rem;

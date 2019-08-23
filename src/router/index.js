@@ -9,6 +9,7 @@ import Place from '@/components/movie/Place'
 import Search from '@/components/movie/Search'
 import Comming from '@/components/movie/Comming'
 import Detail from '@/components/view/Detail'
+import Nowplay from '@/components/Nowplay'
 
 
 
@@ -38,6 +39,7 @@ export default new Router({
               component: Place,
             },
             {
+              //重定向  默认显示路由
               path:"/movie",
               redirect:"/movie/hot",
             },
@@ -75,5 +77,10 @@ export default new Router({
       name: 'Detail',
       component: Detail
     },
+    {
+      path: '/nowplay',
+      name: 'Nowplay',
+      component: Nowplay
+    }
   ]
 })

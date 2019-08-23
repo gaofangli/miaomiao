@@ -5,9 +5,14 @@ import Axios from 'axios'
 import MintUI from 'mint-ui'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import store from "./store"
+
+// import Loading from '@components/Loading'
+// Vue.component('Loading',Loading)
 Vue.use(ElementUI)
 Vue.use(MintUI)
 Vue.prototype.$axios = Axios
+Vue.prototype.$store = store
 
 
 Vue.config.productionTip = false
@@ -16,6 +21,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

@@ -1,7 +1,6 @@
 <template>
     <div>
-      My
-       
+      <p>我的喵喵</p>
     </div>
 </template>
 

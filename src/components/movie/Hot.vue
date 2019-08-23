@@ -1,50 +1,78 @@
 <template>
   <div>
-    <div class="movie-sect" v-for="(item,index) in movieList" :key="index">
-      <div class="img fl">
-        <!-- 图片字符串替代 -->
-       
-          <router-link :to="'/detail/' + item.id"> <img :src="item.img.replace('w.h', '128.180')" alt /></router-link>
-      </div>
-      <div class="text fl">
-        <!-- 判断如果version==v3d给它一个类名 -->
-        <span :class="{'d3':item.version !=n}" class="d" v-show="item.version">{{item.version}}</span>
-        <p class="tit">
-          <span class="s1">{{item.nm}}</span>
-        </p>
-        <p
-          class="sc"
-          v-html="item.globalReleased?'<span style=font-size:.1rem;>猫眼评分</span>'+ item.sc :item.wish+'<span style=font-size:.1rem;>人想看<span>'"
-        ></p>
-        <p class="star">{{item.star}}</p>
-        <p class="showInfo">{{item.showInfo}}</p>
-        <span class="buy">{{item.globalReleased?"购票":"预售"}}</span>
-      </div>
-    </div>
+    <!-- 数据没有加载成功显示 -->
+    <Loading v-if="isLoading" />
+    <ul v-else>
+      <li class="movie-sect" v-for="(item,index) in movieList" :key="index">
+        <div class="img fl">
+          <!-- 图片字符串替代 -->
+
+          <router-link :to="'/detail/' + item.id">
+            <img :src="item.img.replace('w.h', '128.180')" alt />
+          </router-link>
+        </div>
+        <div class="text fl">
+          <!-- 判断如果version==v3d给它一个类名 -->
+          <span :class="{'d3':item.version !=n}" class="d" v-show="item.version">{{item.version}}</span>
+          <p class="tit">
+            <span class="s1">{{item.nm}}</span>
+          </p>
+          <p
+            class="sc"
+            v-html="item.globalReleased?'<span style=font-size:.1rem;>猫眼评分</span>'+ item.sc :item.wish+'<span style=font-size:.1rem;>人想看<span>'"
+          ></p>
+          <p class="star">{{item.star}}</p>
+          <p class="showInfo">{{item.showInfo}}</p>
+          <span class="buy">{{item.globalReleased?"购票":"预售"}}</span>
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
+import Loading from "../Loading/Loading";
+
 export default {
+  components: {
+    Loading
+  },
   data() {
     return {
       n: "v3d",
-      movieList: []
+      movieList: [],
+      isLoading: true,
+      prevCityId: -1 //上一个城市id
     };
   },
 
   methods: {
     getData() {
+      var cityId = this.$store.state.city.id;
+      if (this.prevCityId === cityId) {
+        return;
+      }
+      this.isLoading = true;
+      console.log(111);
       this.$axios({
-        url: "/miao/api/movieOnInfoList?cityId=10"
+        // http://39.97.33.178/api/movieOnInfoList?cityId=10
+        url: "/miao/api/movieOnInfoList",
+        params: {
+          cityId: cityId
+        }
       }).then(res => {
-        this.movieList = res.data.data.movieList;
+        var msg = res.data.msg;
+        if (msg === "ok") {
+          this.movieList = res.data.data.movieList;
+          this.isLoading = false;
+          this.prevCityId = cityId;
+        }
       });
-    },
-    
+    }
   },
-  mounted() {
+  activated() {
     this.getData();
+    // console.log(111);
   }
 };
 </script>

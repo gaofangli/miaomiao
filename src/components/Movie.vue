@@ -5,7 +5,8 @@
       <p class="nav-movie">
         <router-link to="/movie/place">
           <span class="place fl" :class="{'active':i==3}" @click="i=3">
-            哈尔滨
+        <!-- 哈尔滨  -->
+          {{$store.state.city.nm}}
             <i></i>
           </span>
         </router-link>
@@ -22,13 +23,19 @@
       </p>
     </div>
     <div class="movie-home">
+      <keep-alive>
       <router-view></router-view>
+      </keep-alive>
     </div>
+  
   </div>
 </template>
 
 <script>
 export default {
+  components:{
+    //  MessageBox
+  },
   data() {
     return {
       i: "0" //默认显示
@@ -71,7 +78,6 @@ export default {
         line-height: 0.4rem;
         display: inline-block;
         font-size: 0.14rem;
-        display: inline-block;
         padding: 0px 0.1rem;
         margin-left: 0.15rem;
         border-bottom: 0.02rem solid transparent;

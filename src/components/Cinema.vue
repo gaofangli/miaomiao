@@ -22,7 +22,12 @@
           <span class="fr">{{item.distance}}</span>
         </div>
         <div class="card">
-          <span v-for="(item,key) in item.tag" v-show="item ===1 " :class="key | classCard" :key="key">{{ key | formatCard }}</span>
+          <span
+            v-for="(item,key) in item.tag"
+            v-show="item ===1 "
+            :class="key | classCard"
+            :key="key"
+          >{{ key | formatCard }}</span>
         </div>
       </li>
     </ul>
@@ -72,13 +77,24 @@ export default {
   },
   methods: {
     getData() {
+      var cityId = this.$store.state.city.id;
+      if (this.prevCityId === cityId) {
+        return;
+      }
+      this.isLoading = true;
       this.$axios({
-        url: "/miao/api/cinemaList?cityId=10"
+        // "/miao/api/cinemaList?cityId=10",
+        url: "/miao/api/cinemaList",
+        params: {
+          cityId: cityId
+        }
       }).then(res => {
         var msg = res.data.msg;
         if ((msg = res.data.msg)) {
           this.cinemaList = res.data.data.cinemas;
-          console.log(this.cinemaList);
+          this.prevCityId = cityId;
+
+          // console.log(this.cinemaList);
         }
       });
     }
@@ -136,35 +152,37 @@ export default {
   ul {
     flex: 1;
     overflow: auto;
-    li{
-        width: 100%;
-        min-height: 1.19rem;
-        padding: .19rem .16rem .14rem;
-        border-bottom:  .01rem solid #f5f3f1;
-        padding-bottom: .15rem;
-        .tit{
-            font-size: .14rem;
+    li {
+      width: 100%;
+      min-height: 1.19rem;
+      padding: 0.19rem 0.16rem 0.14rem;
+      border-bottom: 0.01rem solid #f5f3f1;
+      padding-bottom: 0.15rem;
+      .tit {
+        font-size: 0.14rem;
+      }
+      .address {
+        font-size: 0.12rem;
+        color: #666666;
+        padding-top: 0.1rem;
+      }
+      .card {
+        span {
+          display: inline-block;
+          border-radius: 0.03rem;
+          margin-right: 0.1rem;
+          margin-top: 0.1rem;
         }
-        .address{
-            font-size: .12rem;
-            color:#666666;
-            padding-top: .1rem;
-        }
-        .card{
-            span{
-                display: inline-block;
-                border-radius: .03rem;
-                margin-right: .1rem;
-                margin-top: .1rem;
-            }
-        }
+      }
     }
   }
 }
-.bl{
-    color: yellow;border: .01rem solid yellow;
+.bl {
+  color: yellow;
+  border: 0.01rem solid yellow;
 }
-.or{
-    color: lightblue;border: .01rem solid lightblue;
+.or {
+  color: lightblue;
+  border: 0.01rem solid lightblue;
 }
 </style>

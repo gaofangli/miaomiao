@@ -42,9 +42,10 @@ export default {
     // axios防抖 多次请求数据，阻止上一次请求
     message(newVal) {
       var that = this;
+      var cityId = this.$store.state.city.id
       this.cancelRequest();
       this.$axios
-        .get("/miao/api/searchList?cityId=10&kw=" + newVal, {
+        .get("/miao/api/searchList?cityId=1"+ cityId +"&kw=" + newVal, {
           cancelToken: new this.$axios.CancelToken(function(c) {
             that.source = c;
           })
