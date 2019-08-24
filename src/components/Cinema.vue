@@ -1,45 +1,54 @@
 <template>
   <div class="cinema">
-    <div class="cinema-main">
-      <p class="mm-cinema">喵喵影院</p>
-      <p class="nav-cinema">
-        <span v-for="(item,index) in arr" :key="index">
-          {{item}}
-          <i></i>
-        </span>
-      </p>
-    </div>
-    <ul>
-      <li v-for="item in cinemaList" :key="item.id">
-        <div class="tit">
-          <span class="tit-nm">{{item.nm}}</span>
-          <span class="q">
-            <span class="price">{{item.sellPrice}}</span>元起
+    <Loading v-if="isLoading" />
+    <div v-else>
+      <div class="cinema-main">
+        <p class="mm-cinema">喵喵影院</p>
+        <p class="nav-cinema">
+          <span v-for="(item,index) in arr" :key="index">
+            {{item}}
+            <i></i>
           </span>
-        </div>
-        <div class="address">
-          <span>{{item.addr}}</span>
-          <span class="fr">{{item.distance}}</span>
-        </div>
-        <div class="card">
-          <span
-            v-for="(item,key) in item.tag"
-            v-show="item ===1 "
-            :class="key | classCard"
-            :key="key"
-          >{{ key | formatCard }}</span>
-        </div>
-      </li>
-    </ul>
+        </p>
+      </div>
+      <ul>
+        <li v-for="item in cinemaList" :key="item.id">
+          <div class="tit">
+            <span class="tit-nm">{{item.nm}}</span>
+            <span class="q">
+              <span class="price">{{item.sellPrice}}</span>元起
+            </span>
+          </div>
+          <div class="address">
+            <span>{{item.addr}}</span>
+            <span class="fr">{{item.distance}}</span>
+          </div>
+          <div class="card">
+            <span
+              v-for="(item,key) in item.tag"
+              v-show="item ===1 "
+              :class="key | classCard"
+              :key="key"
+            >{{ key | formatCard }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+import Loading from "./Loading/Loading";
+
 export default {
+   components: {
+    Loading
+  },
   data() {
     return {
       cinemaList: [],
-      arr: ["全城", "品牌", "特色"]
+      arr: ["全城", "品牌", "特色"],
+      isLoading:true,
     };
   },
   mounted() {
@@ -93,6 +102,7 @@ export default {
         if ((msg = res.data.msg)) {
           this.cinemaList = res.data.data.cinemas;
           this.prevCityId = cityId;
+          this.isLoading = false;
 
           // console.log(this.cinemaList);
         }

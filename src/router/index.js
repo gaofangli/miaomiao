@@ -9,7 +9,6 @@ import Place from '@/components/movie/Place'
 import Search from '@/components/movie/Search'
 import Comming from '@/components/movie/Comming'
 import Detail from '@/components/view/Detail'
-import Nowplay from '@/components/Nowplay'
 
 
 
@@ -76,11 +75,7 @@ export default new Router({
       path: '/detail/:id',
       name: 'Detail',
       component: Detail
-    },
-    {
-      path: '/nowplay',
-      name: 'Nowplay',
-      component: Nowplay
     }
+   
   ]
 })

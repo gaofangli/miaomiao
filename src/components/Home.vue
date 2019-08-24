@@ -57,20 +57,19 @@ export default {
          var id = res.data.data.id
          
         //  如果城市所指刚好是切换的城市，没有弹出框
-          if(this.$store.state.city.id == id){return;}
+          if(this.$store.state.city.id === id){return;}
            //   调用并传参
             messageBox({
                 title:"定位",
                 content:nm,
                 cancel:"取消",
                 ok:"切换定位",
-                handleCancel(){
-                    console.log(1)
-                },
-                handleOk(){
+                 
+                handleOk(e){
                   window.localStorage.setItem("nowNm",nm)
                   window.localStorage.setItem("nowId",id)
                   window.location.reload()
+                 
                 }
             });
               }

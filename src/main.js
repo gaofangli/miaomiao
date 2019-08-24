@@ -6,7 +6,7 @@ import MintUI from 'mint-ui'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from "./store"
-
+import 'swiper/dist/css/swiper.css';
 // import Loading from '@components/Loading'
 // Vue.component('Loading',Loading)
 Vue.use(ElementUI)
