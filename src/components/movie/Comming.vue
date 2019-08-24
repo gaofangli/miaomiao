@@ -38,7 +38,9 @@ export default {
       n: "v3d",
       comingList: [],
       isLoading: true,
-      prevCityId: -1
+      prevCityId: -1,//上一个城市ID
+      isLoading:true,
+
     };
   },
   methods: {
@@ -48,7 +50,6 @@ export default {
       if (this.prevCityId === cityId) {
         return;
       }
-      console.log(1)
       this.isLoading = true;
       this.$axios.get("/miao/api/movieComingList?cityId=" +cityId).then(res => {
         this.comingList = res.data.data.comingList;

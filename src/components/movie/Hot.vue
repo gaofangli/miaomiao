@@ -53,7 +53,6 @@ export default {
         return;
       }
       this.isLoading = true;
-      console.log(111);
       this.$axios({
         // http://39.97.33.178/api/movieOnInfoList?cityId=10
         url: "/miao/api/movieOnInfoList",

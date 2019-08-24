@@ -1,31 +1,33 @@
 <template>
-  <div class="detail-main">
-    <p class="tit">
-      <span class="less">&#xe628;</span> 影片详情
-    </p>
-    <div v-for="(item,index) in detailMovie" :key="index">
-      <div class="content">
-        <img class="con-bg" :src="item.img.replace('w.h', '128.180')" alt />
-        <div class="con-ceng"></div>
-        <div class="box">
-          <div class="img fl">
-            <img :src="item.img.replace('w.h', '128.180')" alt />
-            <a :href="item.vd">
-              <span>&#xe60e;</span>
-            </a>
-          </div>
-          <div class="con fl">
-            <p class="nm">{{item.nm}}</p>
-            <p class="enm">{{item.enm}}</p>
-            <p class="latest">{{item.latestEpisode}}</p>
-            <p class="cat">{{item.cat}}</p>
-            <p class="src">{{item.src}}/{{item.dur}}分钟</p>
-            <p class="pub">{{item.pubDesc}}</p>
+  <div class="detail-main slide-enter-active">
+    <Loading v-if="isLoading" />
+    <div v-else>
+      <p class="tit">
+        <span class="less" @click="handToback">&#xe628;</span> 影片详情
+      </p>
+      <div v-for="(item,index) in detailMovie" :key="index">
+        <div class="content">
+          <img class="con-bg" :src="item.img.replace('w.h', '128.180')" alt />
+          <div class="con-ceng"></div>
+          <div class="box">
+            <div class="img fl">
+              <img :src="item.img.replace('w.h', '128.180')" alt />
+              <a :href="item.vd">
+                <span>&#xe60e;</span>
+              </a>
+            </div>
+            <div class="con fl">
+              <p class="nm">{{item.nm}}</p>
+              <p class="enm">{{item.enm}}</p>
+              <p class="latest">{{item.latestEpisode}}</p>
+              <p class="cat">{{item.cat}}</p>
+              <p class="src">{{item.src}}/{{item.dur}}分钟</p>
+              <p class="pub">{{item.pubDesc}}</p>
+            </div>
           </div>
         </div>
-      </div>
-      <p class="dra">{{item.dra}}</p>
-      <div class="photo">
+        <p class="dra">{{item.dra}}</p>
+        <!-- <div class="photo">
         <ul>
           <li  class="fl"><img
           :src="item1.replace('w.h', '128.180')"
@@ -34,26 +36,53 @@
           :key="index"
         /></li>
         </ul>
+        </div>-->
+        <div class="swiper-wrapper photo" ref="detail_player">
+          <div class="swiper-slide">
+            <img
+              :src="item1.replace('w.h', '128.180')"
+              alt
+              v-for="(item1,index) in item.photos"
+              :key="index"
+            />
+          </div>
+        </div>
       </div>
     </div>
-
-    <div></div>
   </div>
 </template>
 
 <script>
+import "swiper/dist/css/swiper.css";
+import Swiper from "swiper";
+import Loading from "../Loading/Loading";
+
 export default {
+  components: {
+    Loading
+  },
   data() {
     return {
       movieId: "",
       bg: "",
-      detailMovie: {}
+      detailMovie: {},
+      isLoading:true,
+
     };
   },
   mounted() {
     this.getData();
+    new Swiper(".swiper-wrapper", {
+      slidesPerView: "auto",
+      freeMode: true,
+      freeModeSticky: true
+    });
   },
   methods: {
+    handToback() {
+      // 回到上一步
+      this.$router.back();
+    },
     getData() {
       this.$axios({
         // http://39.97.33.178/api/detailmovie?movieId=345808
@@ -64,6 +93,7 @@ export default {
       }).then(res => {
         this.bg = res.data.data.detailMovie.img;
         this.detailMovie = res.data.data;
+        this.isLoading = false;
       });
     }
   }
@@ -71,12 +101,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-video {
-  position: absolute;
-  z-index: 1000;
-}
 .detail-main {
   padding-bottom: 0.5rem;
+}
+.slide-enter-active {
+  animation: 0.3s slideMovie;
+}
+@keyframes slideMovie {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 .tit {
   width: 100%;
@@ -89,9 +126,9 @@ video {
   position: relative;
   .less {
     font-family: "iconfont";
-    font-size: .2rem;
+    font-size: 0.2rem;
     position: absolute;
-    left: .1rem;
+    left: 0.1rem;
     top: 0rem;
   }
 }
@@ -181,14 +218,15 @@ video {
   height: 0.25rem;
   width: 94%;
   padding: 0rem 3%;
-  overflow: hidden;
+  // overflow:auto;
   margin-top: 0.2rem;
-  ul{
+  overflow: auto;
+  .swiper-slide {
     width: 10rem;
   }
   img {
     width: 0.7rem;
-     height: 0.25rem;
+    height: 0.25rem;
     float: left;
     margin-right: 0.15rem;
   }
